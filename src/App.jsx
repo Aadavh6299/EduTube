@@ -5,10 +5,14 @@ import Header from "./components/Header";
 import LevelPills from "./components/LevelPills";
 import VideoGrid from "./components/VideoGrid";
 import WatchView from "./components/WatchView";
+import BottomNav from "./components/BottomNav";
+import Shorts from "./components/Shorts";
+import Account from "./components/Account";
 
 const PER_PAGE = 12;
 
 export default function App() {
+  const [tab, setTab] = useState("home");
   const [levelId, setLevelId] = useState("school");
   const [query, setQuery] = useState("");
   const [videos, setVideos] = useState([]);
@@ -23,6 +27,7 @@ export default function App() {
   const level = LEVELS.find(l => l.id === levelId);
 
   useEffect(() => {
+    if (tab !== "home") return;
     let cancelled = false;
 
     async function load() {
@@ -53,11 +58,9 @@ export default function App() {
     }
 
     load();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [levelId]);
+  }, [levelId, tab]);
 
   const loadMore = useCallback(async () => {
     if (loadingMore || loading || !hasMore) return;
@@ -82,7 +85,7 @@ export default function App() {
   }, [loadingMore, loading, hasMore, level, pageTokens]);
 
   useEffect(() => {
-    if (!sentinelRef.current || watching) return;
+    if (tab !== "home" || !sentinelRef.current || watching) return;
     const observer = new IntersectionObserver(
       entries => {
         if (entries[0].isIntersecting) loadMore();
@@ -91,7 +94,7 @@ export default function App() {
     );
     observer.observe(sentinelRef.current);
     return () => observer.disconnect();
-  }, [loadMore, watching]);
+  }, [loadMore, watching, tab]);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return videos;
@@ -100,26 +103,35 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header query={query} onQueryChange={setQuery} onLogoClick={() => setWatching(null)} />
-      <LevelPills levels={LEVELS} activeId={levelId} onSelect={setLevelId} />
+      {tab === "home" && (
+        <>
+          <Header query={query} onQueryChange={setQuery} onLogoClick={() => setWatching(null)} />
+          <LevelPills levels={LEVELS} activeId={levelId} onSelect={setLevelId} />
 
-      {watching ? (
-        <WatchView video={watching} onBack={() => setWatching(null)} />
-      ) : (
-        <main className="main">
-          {loading && <p className="status">Loading {level.label} videos...</p>}
-          {!loading && error && <p className="status error">Kuch gadbad ho gayi: {error}</p>}
-          {!loading && !error && !level.channelIds.length && (
-            <p className="status">Is level ke liye abhi koi channel add nahi kiya gaya hai.</p>
+          {watching ? (
+            <WatchView video={watching} onBack={() => setWatching(null)} />
+          ) : (
+            <main className="main">
+              {loading && <p className="status">Loading {level.label} videos...</p>}
+              {!loading && error && <p className="status error">Kuch gadbad ho gayi: {error}</p>}
+              {!loading && !error && !level.channelIds.length && (
+                <p className="status">Is level ke liye abhi koi channel add nahi kiya gaya hai.</p>
+              )}
+              {!loading && !error && level.channelIds.length > 0 && filtered.length === 0 && (
+                <p className="status">Koi video nahi mila.</p>
+              )}
+              <VideoGrid videos={filtered} onSelect={setWatching} />
+              <div ref={sentinelRef} style={{ height: 1 }} />
+              {loadingMore && <p className="status">Aur videos load ho rahe hain...</p>}
+            </main>
           )}
-          {!loading && !error && level.channelIds.length > 0 && filtered.length === 0 && (
-            <p className="status">Koi video nahi mila.</p>
-          )}
-          <VideoGrid videos={filtered} onSelect={setWatching} />
-          <div ref={sentinelRef} style={{ height: 1 }} />
-          {loadingMore && <p className="status">Aur videos load ho rahe hain...</p>}
-        </main>
+        </>
       )}
+
+      {tab === "shorts" && <Shorts />}
+      {tab === "account" && <Account />}
+
+      <BottomNav active={tab} onSelect={setTab} />
     </div>
   );
 }
