@@ -5,7 +5,8 @@ function uploadsPlaylistId(channelId) {
   return "UU" + channelId.slice(2);
 }
 
-export async function fetchChannelVideos(channelId, maxResults = 8) {
+// Fetches one page of videos from a channel's uploads playlist.
+export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 12) {
   if (!API_KEY) {
     throw new Error(
       "YouTube API key missing. Add VITE_YOUTUBE_API_KEY in your .env file."
@@ -13,7 +14,8 @@ export async function fetchChannelVideos(channelId, maxResults = 8) {
   }
 
   const playlistId = uploadsPlaylistId(channelId);
-  const url = `${BASE_URL}/playlistItems?part=snippet,contentDetails&playlistId=${playlistId}&maxResults=${maxResults}&key=${API_KEY}`;
+  let url = `${BASE_URL}/playlistItems?part=snippet,contentDetails&playlistId=${playlistId}&maxResults=${maxResults}&key=${API_KEY}`;
+  if (pageToken) url += `&pageToken=${pageToken}`;
 
   const res = await fetch(url);
   if (!res.ok) {
@@ -22,7 +24,7 @@ export async function fetchChannelVideos(channelId, maxResults = 8) {
   }
   const data = await res.json();
 
-  return (data.items || [])
+  const videos = (data.items || [])
     .filter(item => item.snippet?.title && item.snippet.title !== "Private video")
     .map(item => ({
       id: item.contentDetails.videoId,
@@ -31,11 +33,16 @@ export async function fetchChannelVideos(channelId, maxResults = 8) {
       thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url,
       publishedAt: item.snippet.publishedAt,
     }));
+
+  return { videos, nextPageToken: data.nextPageToken || null };
 }
 
-export async function fetchVideosForLevel(channelIds, maxPerChannel = 8) {
+// Fetches one page from every channel in a level and merges the results.
+// Returns each channel's nextPageToken too, so more can be loaded later
+// (infinite scroll) without losing place in any channel.
+export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel = 12) {
   const outcomes = await Promise.allSettled(
-    channelIds.map(id => fetchChannelVideos(id, maxPerChannel))
+    channelIds.map(id => fetchChannelVideoPage(id, pageTokens[id] || null, maxPerChannel))
   );
 
   const failures = outcomes.filter(o => o.status === "rejected");
@@ -43,8 +50,20 @@ export async function fetchVideosForLevel(channelIds, maxPerChannel = 8) {
     throw failures[0].reason;
   }
 
-  return outcomes
-    .filter(o => o.status === "fulfilled")
-    .flatMap(o => o.value)
-    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+  const nextPageTokens = {};
+  let videos = [];
+
+  outcomes.forEach((outcome, i) => {
+    const channelId = channelIds[i];
+    if (outcome.status === "fulfilled") {
+      videos = videos.concat(outcome.value.videos);
+      nextPageTokens[channelId] = outcome.value.nextPageToken;
+    } else {
+      nextPageTokens[channelId] = pageTokens[channelId] || null;
+    }
+  });
+
+  videos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+  return { videos, nextPageTokens };
 }
