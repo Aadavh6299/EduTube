@@ -30,8 +30,12 @@ export const LEVELS = [
       "UCrC8mOqJQpoB7NuIMKIS6rQ", // StudyIQ IAS
       "UC1L2JoMpcY6MRLhFd3gg5Xg", // Adda247
       "UCZNNx4KYmCkwxCLdsHyWqQA", // Unacademy JEE
+      "UCdQwYksctqqiRwqp3PiJMWA", // Unacademy NEET
       "UCw4wosjC-DKq95xI5klz92w", // Vision IAS
       "UCgUeJ2Gv7rJtMBkQF2Ppn4A", // ALLEN Career Institute
+      "UCgM9qPLv7R-hTRQIGa4wgKA", // Testbook
+      "UCuWuAvEnKWez5BUr29VpwqA", // wifistudy
+      "UCddnJhXMUxzHoH8AZkZSd8w", // eSaral
     ],
   },
   {
