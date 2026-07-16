@@ -36,7 +36,10 @@ export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 1
       id: item.contentDetails.videoId,
       title: item.snippet.title,
       channel: item.snippet.channelTitle,
-      thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url,
+      thumbnail:
+        item.snippet.thumbnails?.high?.url ||
+        item.snippet.thumbnails?.medium?.url ||
+        item.snippet.thumbnails?.default?.url,
       publishedAt: item.snippet.publishedAt,
     }));
 
