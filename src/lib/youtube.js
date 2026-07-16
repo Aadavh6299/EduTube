@@ -5,12 +5,18 @@ function uploadsPlaylistId(channelId) {
   return "UU" + channelId.slice(2);
 }
 
-// Fetches one page of videos from a channel's uploads playlist.
+function shuffle(array) {
+  const result = array.slice();
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 12) {
   if (!API_KEY) {
-    throw new Error(
-      "YouTube API key missing. Add VITE_YOUTUBE_API_KEY in your .env file."
-    );
+    throw new Error("YouTube API key missing. Add VITE_YOUTUBE_API_KEY in your .env file.");
   }
 
   const playlistId = uploadsPlaylistId(channelId);
@@ -37,9 +43,6 @@ export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 1
   return { videos, nextPageToken: data.nextPageToken || null };
 }
 
-// Fetches one page from every channel in a level and merges the results.
-// Returns each channel's nextPageToken too, so more can be loaded later
-// (infinite scroll) without losing place in any channel.
 export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel = 12) {
   const outcomes = await Promise.allSettled(
     channelIds.map(id => fetchChannelVideoPage(id, pageTokens[id] || null, maxPerChannel))
@@ -63,7 +66,5 @@ export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel 
     }
   });
 
-  videos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
-  return { videos, nextPageTokens };
+  return { videos: shuffle(videos), nextPageTokens };
 }
