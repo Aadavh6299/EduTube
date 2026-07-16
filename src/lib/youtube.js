@@ -14,6 +14,14 @@ function shuffle(array) {
   return result;
 }
 
+function isShortDuration(iso) {
+  const match = iso.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!match) return false;
+  const minutes = parseInt(match[1] || "0", 10);
+  const seconds = parseInt(match[2] || "0", 10);
+  return minutes * 60 + seconds <= 60;
+}
+
 export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 12) {
   if (!API_KEY) {
     throw new Error("YouTube API key missing. Add VITE_YOUTUBE_API_KEY in your .env file.");
@@ -70,4 +78,36 @@ export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel 
   });
 
   return { videos: shuffle(videos), nextPageTokens };
+}
+
+// Fetches recent videos from all given channels, then keeps only the
+// ones 60 seconds or shorter — YouTube's own definition of a "Short".
+export async function fetchShorts(channelIds, maxPerChannel = 15) {
+  const pages = await Promise.allSettled(
+    channelIds.map(id => fetchChannelVideoPage(id, null, maxPerChannel))
+  );
+
+  const candidates = pages
+    .filter(p => p.status === "fulfilled")
+    .flatMap(p => p.value.videos);
+
+  if (!candidates.length) return [];
+
+  const ids = candidates.map(v => v.id);
+  const shortsSet = new Set();
+
+  for (let i = 0; i < ids.length; i += 50) {
+    const batch = ids.slice(i, i + 50);
+    const url = `${BASE_URL}/videos?part=contentDetails&id=${batch.join(",")}&key=${API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) continue;
+    const data = await res.json();
+    (data.items || []).forEach(item => {
+      if (isShortDuration(item.contentDetails.duration)) {
+        shortsSet.add(item.id);
+      }
+    });
+  }
+
+  return shuffle(candidates.filter(v => shortsSet.has(v.id)));
 }
