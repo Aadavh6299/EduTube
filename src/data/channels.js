@@ -5,6 +5,15 @@ export const LEVELS = [
     emoji: "🌱",
     channelIds: [
       "UCBnZ16ahKA2DZ_T5W0FPUXg", // ChuChu TV
+      "@cocomelon",               // Cocomelon - Nursery Rhymes
+      "@infobellshindi",          // Infobells - Hindi
+      "@supersimplesongs",        // Super Simple Songs - Kids Songs
+      "@Pinkfong",                // Pinkfong Baby Shark
+      "@LooLooKids",              // LooLoo Kids
+      "@KidsTVIndia",             // Kids TV India - Hindi
+      "@cvs3drhymes",             // CVS 3D Rhymes & Kids Songs
+      "@BillionSurpriseToys",     // BillionSurpriseToys
+      "@kiddiestvhindi",          // Kiddiestv Hindi
     ],
   },
   {
@@ -19,6 +28,7 @@ export const LEVELS = [
       "UC3HS6gQ79jjn4xHxogw0HiA", // Magnet Brains
       "UCLKvIYLsQISgd0FTl6OdF0A", // Science and Fun Motivation
       "UCphU2bAGmw304CFAzy0Enuw", // PW Foundation (Class 9-10)
+      "@LetsLEARN2016",           // Let's Learn
     ],
   },
   {
@@ -50,8 +60,22 @@ export const LEVELS = [
       "UCAyYBPzFioHUxvVZEn4rMJA", // SSC Adda247
       "UCuTgFUujt6tQXWxQMg-DHrQ", // Railway Testbook
       "UC5H9MzrMkJ5iuN11vV2PLhA", // Rojgar with Ankit
-      "UChjabwygW3HaNgb6JokhRXQ", // StudyIQ SSC
       "UCS2rhpz4RJEmb9CV7TPzBIg", // Gagan Pratap Maths
+      "UC82ObtDCmUuWwrWhpQsX-HQ", // Aakash JEE
+      "@AakashNEET",               // Aakash NEET
+      "@DrishtiPCS",               // Drishti PCS
+      "@TheMrunalPatel",           // Mrunal Patel (Verified Link)
+      "@SleepyClassesIAS",         // Sleepy Classes (Verified Link)
+      "@SSCMaker",                 // SSC MAKER
+      "@UtkarshClassesJodhpur",    // Utkarsh Classes Jodhpur
+      "@AdityaRanjanTalks",        // Aditya Ranjan Talks (SSC Math)
+      "@AbhinayMaths",             // Abhinay Maths
+      "@NeetuSinghEnglish",        // Neetu Singh (KD Campus)
+      "@RBE_RevolutionByEducation",// RBE Revolution By Education
+      "@AmanVashishthSir",         // Aman Vashishth Sir (English)
+      "@EnglishWithRaniMam",       // English with Rani Ma'am
+      "UCyoOKrfVu89ZAGwYqQAyM8A", // Reasoning by Piyush Varshney
+      "UCQtSSzjFvdPaN4HMRt8a_HQ", // IndoLogus
     ],
   },
   {
@@ -61,6 +85,10 @@ export const LEVELS = [
     channelIds: [
       "UCBwmMxybNva6P_5VmxjzwqA", // Apna College
       "UCeVMnSShP_Iviwkknt83cww", // CodeWithHarry
+      "@CollegeWallah",           // College Wallah
+      "@DearSir",                 // Dear Sir
+      "@EnglishConnection",       // English Connection
+      "@JoshTalks",               // Josh Talks
     ],
   },
   {
