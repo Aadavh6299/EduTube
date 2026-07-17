@@ -150,7 +150,7 @@ export default function App() {
           />
 
           {watching ? (
-            <WatchView video={watching} onBack={() => setWatching(null)} />
+            <WatchView video={watching} onBack={() => setWatching(null)} onSelect={setWatching} />
           ) : (
             <main className="main">
               {loading && <p className="status">{debouncedQuery.trim() ? "Puri app me videos dhoondh rahe hain..." : `Loading ${level.label} videos...`}</p>}
