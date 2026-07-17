@@ -15,11 +15,12 @@ function shuffle(array) {
 }
 
 function isShortDuration(iso) {
-  const match = iso.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
+  const match = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
   if (!match) return false;
-  const minutes = parseInt(match[1] || "0", 10);
-  const seconds = parseInt(match[2] || "0", 10);
-  return minutes * 60 + seconds <= 60;
+  const hours = parseInt(match[1] || "0", 10);
+  const minutes = parseInt(match[2] || "0", 10);
+  const seconds = parseInt(match[3] || "0", 10);
+  return hours === 0 && minutes * 60 + seconds <= 60;
 }
 
 export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 12) {
@@ -80,8 +81,6 @@ export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel 
   return { videos: shuffle(videos), nextPageTokens };
 }
 
-// Fetches recent videos from all given channels, then keeps only the
-// ones 60 seconds or shorter — YouTube's own definition of a "Short".
 export async function fetchShorts(channelIds, maxPerChannel = 15) {
   const pages = await Promise.allSettled(
     channelIds.map(id => fetchChannelVideoPage(id, null, maxPerChannel))
