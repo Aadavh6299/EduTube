@@ -23,6 +23,21 @@ function isShortDuration(iso) {
   return hours === 0 && minutes * 60 + seconds <= 60;
 }
 
+async function fetchDurations(ids) {
+  const durations = {};
+  for (let i = 0; i < ids.length; i += 50) {
+    const batch = ids.slice(i, i + 50);
+    const url = `${BASE_URL}/videos?part=contentDetails&id=${batch.join(",")}&key=${API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) continue;
+    const data = await res.json();
+    (data.items || []).forEach(item => {
+      durations[item.id] = item.contentDetails.duration;
+    });
+  }
+  return durations;
+}
+
 export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 12) {
   if (!API_KEY) {
     throw new Error("YouTube API key missing. Add VITE_YOUTUBE_API_KEY in your .env file.");
@@ -55,6 +70,9 @@ export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 1
   return { videos, nextPageToken: data.nextPageToken || null };
 }
 
+// Fetches one page from every channel in a level, merges the results,
+// removes anything that's actually a Short (≤60s — those only belong in
+// the Shorts tab), and shuffles what's left.
 export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel = 12) {
   const outcomes = await Promise.allSettled(
     channelIds.map(id => fetchChannelVideoPage(id, pageTokens[id] || null, maxPerChannel))
@@ -78,6 +96,14 @@ export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel 
     }
   });
 
+  if (videos.length) {
+    const durations = await fetchDurations(videos.map(v => v.id));
+    videos = videos.filter(v => {
+      const dur = durations[v.id];
+      return dur ? !isShortDuration(dur) : true;
+    });
+  }
+
   return { videos: shuffle(videos), nextPageTokens };
 }
 
@@ -92,21 +118,9 @@ export async function fetchShorts(channelIds, maxPerChannel = 15) {
 
   if (!candidates.length) return [];
 
-  const ids = candidates.map(v => v.id);
-  const shortsSet = new Set();
+  const durations = await fetchDurations(candidates.map(v => v.id));
 
-  for (let i = 0; i < ids.length; i += 50) {
-    const batch = ids.slice(i, i + 50);
-    const url = `${BASE_URL}/videos?part=contentDetails&id=${batch.join(",")}&key=${API_KEY}`;
-    const res = await fetch(url);
-    if (!res.ok) continue;
-    const data = await res.json();
-    (data.items || []).forEach(item => {
-      if (isShortDuration(item.contentDetails.duration)) {
-        shortsSet.add(item.id);
-      }
-    });
-  }
-
-  return shuffle(candidates.filter(v => shortsSet.has(v.id)));
+  return shuffle(
+    candidates.filter(v => durations[v.id] && isShortDuration(durations[v.id]))
+  );
 }
