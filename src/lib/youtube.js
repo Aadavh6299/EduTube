@@ -60,6 +60,7 @@ export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 1
       id: item.contentDetails.videoId,
       title: item.snippet.title,
       channel: item.snippet.channelTitle,
+      channelId: item.snippet.channelId,
       thumbnail:
         item.snippet.thumbnails?.high?.url ||
         item.snippet.thumbnails?.medium?.url ||
