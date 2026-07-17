@@ -17,6 +17,8 @@ export const LEVELS = [
       "UCMY7ZvLB6-DnuSis_2s37_A", // Vedantu Class 9 & 10
       "UCT0s92hGjqLX6p7qY9BBrSA", // NCERT OFFICIAL
       "UC3HS6gQ79jjn4xHxogw0HiA", // Magnet Brains
+      "UCLKvIYLsQISgd0FTl6OdF0A", // Science and Fun Motivation
+      "UCphU2bAGmw304CFAzy0Enuw", // PW Foundation (Class 9-10)
     ],
   },
   {
@@ -36,6 +38,20 @@ export const LEVELS = [
       "UCgM9qPLv7R-hTRQIGa4wgKA", // Testbook
       "UCuWuAvEnKWez5BUr29VpwqA", // wifistudy
       "UCddnJhXMUxzHoH8AZkZSd8w", // eSaral
+      "UCVJU_IChPMOe8RWkdVQjtfQ", // JEE Wallah
+      "UCD16eo98AXl-9T61Xd711kQ", // Competition (NEET) Wallah
+      "UCMRgrt6Pw0s77PEkGcZSMNA", // PW Bihar Board
+      "UCn5N03prvdzaZxEwq3AtHAw", // Commerce Wallah
+      "UCqOy6oOu6RPJNHYQ8f_Ybvg", // UPSC Wallah (PW OnlyIAS)
+      "UCkUI45drrKTWLxy3q3voJRw", // ALLEN JEE
+      "UCySvBtI4jMLXp0BT9osvASw", // ALLEN NEET
+      "UCDA-O-rNN0IKFaQUgWcb67A", // Aakash Institute
+      "UCatL-c6pmnjzEOHSyjn-sHA", // Khan GS Research Centre
+      "UCAyYBPzFioHUxvVZEn4rMJA", // SSC Adda247
+      "UCuTgFUujt6tQXWxQMg-DHrQ", // Railway Testbook
+      "UC5H9MzrMkJ5iuN11vV2PLhA", // Rojgar with Ankit
+      "UChjabwygW3HaNgb6JokhRXQ", // StudyIQ SSC
+      "UCS2rhpz4RJEmb9CV7TPzBIg", // Gagan Pratap Maths
     ],
   },
   {
@@ -44,6 +60,7 @@ export const LEVELS = [
     emoji: "💻",
     channelIds: [
       "UCBwmMxybNva6P_5VmxjzwqA", // Apna College
+      "UCeVMnSShP_Iviwkknt83cww", // CodeWithHarry
     ],
   },
   {
