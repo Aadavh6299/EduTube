@@ -16,7 +16,7 @@ export default function App() {
   const [tab, setTab] = useState("home");
   const [levelId, setLevelId] = useState("school");
   const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState(""); // Naya state API limit bachane ke liye
+  const [debouncedQuery, setDebouncedQuery] = useState(""); 
   const [videos, setVideos] = useState([]);
   const [pageTokens, setPageTokens] = useState({});
   const [hasMore, setHasMore] = useState(false);
@@ -26,9 +26,28 @@ export default function App() {
   const [watching, setWatching] = useState(null);
   const sentinelRef = useRef(null);
 
+  // --- NAYA LOGIC: Back Button Sync ---
+  useEffect(() => {
+    const handlePopState = () => {
+      if (watching) {
+        setWatching(null);
+      } else if (tab !== "home") {
+        setTab("home");
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [watching, tab]);
+
+  useEffect(() => {
+    if (watching || tab !== "home") {
+      window.history.pushState(null, "", window.location.href);
+    }
+  }, [watching, tab]);
+  // ------------------------------------
+
   const level = LEVELS.find(l => l.id === levelId);
 
-  // 1. Debounce Logic: Typing rukne ke 500ms baad hi backend me search hoga
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
@@ -36,7 +55,6 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  // 2. Universal Search Logic: Agar search box me kuch hai, to sabhi channels le aao, warna sirf level wale
   const allChannelIds = useMemo(() => LEVELS.flatMap(l => l.channelIds), []);
   const targetChannelIds = useMemo(() => {
     return debouncedQuery.trim() ? allChannelIds : level.channelIds;
@@ -60,7 +78,6 @@ export default function App() {
       }
 
       try {
-        // Yahan level.channelIds ki jagah targetChannelIds use hoga
         const { videos: firstPage, nextPageTokens } = await fetchLevelPage(targetChannelIds, {}, PER_PAGE);
         if (!cancelled) {
           setVideos(firstPage);
@@ -76,13 +93,10 @@ export default function App() {
 
     load();
     return () => { cancelled = true; };
-    // Dependency me targetChannelIds rakha hai taaki search universal ho sake
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetChannelIds, tab]);
 
   const loadMore = useCallback(async () => {
     if (loadingMore || loading || !hasMore) return;
-    // Yahan bhi targetChannelIds use hoga
     const channelsWithMore = targetChannelIds.filter(id => pageTokens[id]);
     if (!channelsWithMore.length) {
       setHasMore(false);
@@ -100,7 +114,6 @@ export default function App() {
     } finally {
       setLoadingMore(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadingMore, loading, hasMore, targetChannelIds, pageTokens]);
 
   useEffect(() => {
@@ -127,7 +140,6 @@ export default function App() {
         <>
           <Header query={query} onQueryChange={setQuery} onLogoClick={() => setWatching(null)} />
           
-          {/* 3. Nayi category par click karte hi search box clear ho jayega */}
           <LevelPills 
             levels={LEVELS} 
             activeId={levelId} 
@@ -141,7 +153,6 @@ export default function App() {
             <WatchView video={watching} onBack={() => setWatching(null)} />
           ) : (
             <main className="main">
-              {/* Jab universal search chalega to loading text badal jayega */}
               {loading && <p className="status">{debouncedQuery.trim() ? "Puri app me videos dhoondh rahe hain..." : `Loading ${level.label} videos...`}</p>}
               {!loading && error && <p className="status error">Kuch gadbad ho gayi: {error}</p>}
               {!loading && !error && !targetChannelIds.length && (
@@ -152,7 +163,7 @@ export default function App() {
               )}
               <VideoGrid videos={filtered} onSelect={setWatching} />
               <div ref={sentinelRef} style={{ height: 1 }} />
-              {loadingMore && <p className="status">Aur videos load ho rahe hain...</p>}
+              {loadingMore && <p className="status">Aur videos load ho rahe हैं...</p>}
             </main>
           )}
         </>
