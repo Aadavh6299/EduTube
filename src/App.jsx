@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef, useCallback } from "react";
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { LEVELS } from "./data/channels";
 import { fetchLevelPage } from "./lib/youtube";
 import Header from "./components/Header";
@@ -103,6 +104,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <SpeedInsights />
       {tab === "home" && (
         <>
           <Header query={query} onQueryChange={setQuery} onLogoClick={() => setWatching(null)} />
