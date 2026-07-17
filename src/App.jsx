@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef, useCallback } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { LEVELS } from "./data/channels";
 import { fetchLevelPage } from "./lib/youtube";
 import Header from "./components/Header";
@@ -132,6 +133,7 @@ export default function App() {
       {tab === "account" && <Account />}
 
       <BottomNav active={tab} onSelect={setTab} />
+      <Analytics />
     </div>
   );
 }
