@@ -65,18 +65,18 @@ export const LEVELS = [
       "UCS2rhpz4RJEmb9CV7TPzBIg", // Gagan Pratap Maths
       "UCRFAS9U1zB2O86q0-25M4lA", // Abhinay Maths
       "UCB1eE1L4A2yXJ655y7G_1Ig", // Aditya Ranjan Talks
-      "UCyZip9ot4fJqdtgVfTOmPow", // Maths with Bhutesh Sir / Remo Sir
-      "UCPv6hX-X7Hl-UuE8Y1wQYfQ", // Neetu Singh English (KD Campus)
+      "UCyZip9ot4fJqdtgVfTOmPow", // Maths with Bhutesh Sir
+      "UCPv6hX-X7Hl-UuE8Y1wQYfQ", // Neetu Singh English
       "UC9-zQ6A3vP9rP2rA7u7kYxw", // English with Rani Ma'am
       "UCiVSfEmUU2phsdTzvlW-phg", // Aman Vashishth Sir
       "UCyoOKrfVu89ZAGwYqQAyM8A", // Reasoning by Piyush Varshney
-      "UCnoFgtSgG9PPAmwzG2P00JA", // Vikramjeet Sir Reasoning (Rankers Gurukul)
+      "UCnoFgtSgG9PPAmwzG2P00JA", // Vikramjeet Sir Reasoning
       "UCzLqOSZPtUKrmSEnlH4LAvw", // Drishti IAS
       "UCrC8mOqJQpoB7NuIMKIS6rQ", // StudyIQ IAS
       "UCatL-c6pmnjzEOHSyjn-sHA", // Khan GS Research Centre
       "UC1uCovSTQkI7hOUQsTN3Gmg", // Mrunal Patel
       "UCNiPXX05gE_gEwP9K9K9jTQ", // Vikas Divyakirti
-      "UCO_h4B1B-O6N7kE2B-9HhJw", // Gaurav Garg Sir (Current Affairs)
+      "UCO_h4B1B-O6N7kE2B-9HhJw", // Gaurav Garg Sir
       "UC1L2JoMpcY6MRLhFd3gg5Xg", // Adda247
       "UCAyYBPzFioHUxvVZEn4rMJA", // SSC Adda247
       "UC5H9MzrMkJ5iuN11vV2PLhA", // Rojgar with Ankit
@@ -96,12 +96,12 @@ export const LEVELS = [
       "UCBwmMxybNva6P_5VmxjzwqA", // Apna College
       "UCeVMnSShP_Iviwkknt83cww", // CodeWithHarry
       "UCDrf0V4fcBr5FlCtKwvpfwA", // College Wallah
-      "UCJihyK0A38SZ6SdJirEdIOw", // Gate Smashers (B.Tech)
-      "UCQG40hal8niYCE69twKEG7w", // Neso Academy (Engineering)
-      "UCl6L_aW2iF4XmRj9OaUaQGw", // Jenny's Lectures (CS/IT)
-      "UC59K-uG2A5OGwYHZvkUvgYA", // Telusko (Programming)
+      "UCJihyK0A38SZ6SdJirEdIOw", // Gate Smashers
+      "UCQG40hal8niYCE69twKEG7w", // Neso Academy
+      "UCl6L_aW2iF4XmRj9OaUaQGw", // Jenny's Lectures
+      "UC59K-uG2A5OGwYHZvkUvgYA", // Telusko
       "UC8butISFwT-Wl7EV0hUK0BQ", // freeCodeCamp.org
-      "UCJskGeByzRRSvmOoAXd-l2A", // takeUforward (Striver)
+      "UCJskGeByzRRSvmOoAXd-l2A", // takeUforward
       "UCQ-W1KE9EYfdxhL6S4twUNw", // CodeHelp - by Babbar
     ],
   },
@@ -110,12 +110,12 @@ export const LEVELS = [
     label: "IITs, NITs & Global",
     emoji: "🎓",
     channelIds: [
-      "UCYa1WtI-vb_bx-anHdmpNfA", // NPTEL-NOC IITM (Official IIT Lectures)
+      "UCYa1WtI-vb_bx-anHdmpNfA", // NPTEL-NOC IITM
       "UCF9LqU4s5m2TzM1KqT41M2A", // IIT Bombay Official
       "UCqT3qA_R_J5aJ0S8L5j_4gQ", // IIT Delhi Official
       "UCzS9bI4E7y3_zO8xZ7A8zQg", // IIT Madras
       "UCk2p19Bq5xP5W4Jm6C_gMVA", // IIT Kanpur
-      "UCEBb1b_L6zDS3xTUrIALZOw", // MIT OpenCourseWare (Global)
+      "UCEBb1b_L6zDS3xTUrIALZOw", // MIT OpenCourseWare
       "UC_U6gHj41JvJj11M9Q4n4Qw", // Stanford Online
       "UClq5iFvNfW6y0oP9WJbZ9Yw", // Harvard University
       "UC4Y_3H2d1L8hBv5E2lU51Cw", // Oxford Mathematics
@@ -126,7 +126,6 @@ export const LEVELS = [
     label: "Science & Knowledge",
     emoji: "🌍",
     channelIds: [
-      "UCYO_jab_edu_ReK0sAflrg", // 3Blue1Brown (Maths Magic)
       "UCsooa4yRKGN_zEE8iknghZA", // TED-Ed
       "UCX6b17PVsYBQ0ip5gyeme-Q", // CrashCourse
       "UCsXVk37bltHxD1rDPwtNM8Q", // Kurzgesagt – In a Nutshell
