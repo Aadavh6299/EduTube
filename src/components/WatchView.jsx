@@ -1,6 +1,27 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { fetchChannelVideoPage } from "../lib/youtube";
 
+// Fetches pages from a channel until it finds enough videos that haven't
+// been shown yet this session (or the channel runs out of videos).
+async function fetchFreshBatch(channelId, startToken, seen, minCount, maxPages) {
+  let token = startToken;
+  let collected = [];
+  let nextToken = null;
+  let pagesLoaded = 0;
+
+  while (pagesLoaded < maxPages) {
+    const { videos, nextPageToken } = await fetchChannelVideoPage(channelId, token, 10);
+    const fresh = videos.filter(v => !seen.has(v.id));
+    collected = collected.concat(fresh);
+    nextToken = nextPageToken;
+    pagesLoaded++;
+    if (collected.length >= minCount || !nextPageToken) break;
+    token = nextPageToken;
+  }
+
+  return { videos: collected, nextPageToken: nextToken };
+}
+
 export default function WatchView({ video, onBack, onSelect }) {
   const [suggestions, setSuggestions] = useState([]);
   const [pageToken, setPageToken] = useState(null);
@@ -8,6 +29,11 @@ export default function WatchView({ video, onBack, onSelect }) {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const sentinelRef = useRef(null);
+  const seenIds = useRef(new Set());
+
+  useEffect(() => {
+    seenIds.current.add(video.id);
+  }, [video.id]);
 
   useEffect(() => {
     let cancelled = false;
@@ -22,9 +48,10 @@ export default function WatchView({ video, onBack, onSelect }) {
         return;
       }
       try {
-        const { videos, nextPageToken } = await fetchChannelVideoPage(video.channelId, null, 10);
+        const { videos, nextPageToken } = await fetchFreshBatch(video.channelId, null, seenIds.current, 6, 5);
         if (!cancelled) {
-          setSuggestions(videos.filter(v => v.id !== video.id));
+          videos.forEach(v => seenIds.current.add(v.id));
+          setSuggestions(videos);
           setPageToken(nextPageToken);
           setHasMore(!!nextPageToken);
         }
@@ -36,14 +63,16 @@ export default function WatchView({ video, onBack, onSelect }) {
     }
     load();
     return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [video.id, video.channelId]);
 
   const loadMore = useCallback(async () => {
     if (loadingMore || loading || !hasMore || !video.channelId) return;
     setLoadingMore(true);
     try {
-      const { videos, nextPageToken } = await fetchChannelVideoPage(video.channelId, pageToken, 10);
-      setSuggestions(prev => [...prev, ...videos.filter(v => v.id !== video.id)]);
+      const { videos, nextPageToken } = await fetchFreshBatch(video.channelId, pageToken, seenIds.current, 6, 5);
+      videos.forEach(v => seenIds.current.add(v.id));
+      setSuggestions(prev => [...prev, ...videos]);
       setPageToken(nextPageToken);
       setHasMore(!!nextPageToken);
     } catch (e) {
@@ -51,7 +80,7 @@ export default function WatchView({ video, onBack, onSelect }) {
     } finally {
       setLoadingMore(false);
     }
-  }, [loadingMore, loading, hasMore, video.channelId, video.id, pageToken]);
+  }, [loadingMore, loading, hasMore, video.channelId, pageToken]);
 
   useEffect(() => {
     if (!sentinelRef.current) return;
