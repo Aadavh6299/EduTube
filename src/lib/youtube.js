@@ -1,9 +1,6 @@
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 
-// Ye wo words hain jinhe aap block karna chahte hain
-const BLOCKED_KEYWORDS = ["shorts", "short", "status", "whatsapp", "vertical"];
-
 function uploadsPlaylistId(channelId) {
   return "UU" + channelId.slice(2);
 }
@@ -89,12 +86,7 @@ export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel 
   outcomes.forEach((outcome, i) => {
     const channelId = channelIds[i];
     if (outcome.status === "fulfilled") {
-      // Filter laga diya hai taaki titles me blocked words wale video home feed me na aayen
-      const cleanVideos = outcome.value.videos.filter(v => 
-        !BLOCKED_KEYWORDS.some(keyword => v.title.toLowerCase().includes(keyword.toLowerCase()))
-      );
-      
-      videos = videos.concat(cleanVideos);
+      videos = videos.concat(outcome.value.videos);
       nextPageTokens[channelId] = outcome.value.nextPageToken;
     } else {
       nextPageTokens[channelId] = pageTokens[channelId] || null;
