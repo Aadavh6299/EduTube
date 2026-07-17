@@ -8,7 +8,8 @@ function ShortItem({ short, isActive, registerRef }) {
       {isActive ? (
         <iframe
           className="shorts-player"
-          src={`https://www.youtube.com/embed/${short.id}?playsinline=1&rel=0&autoplay=1`}
+          // Yahan loop=1 aur playlist=short.id add kiya hai taaki video auto-replay ho
+          src={`https://www.youtube.com/embed/${short.id}?playsinline=1&rel=0&autoplay=1&loop=1&playlist=${short.id}`}
           title={short.title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
