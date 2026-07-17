@@ -10,7 +10,7 @@ export default function Header({ query, onQueryChange, onLogoClick }) {
       <input
         className="search"
         type="text"
-        placeholder="Search within this level..."
+        placeholder="Search any topic, teacher, or video..."
         value={query}
         onChange={e => onQueryChange(e.target.value)}
       />
