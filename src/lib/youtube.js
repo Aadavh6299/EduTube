@@ -70,9 +70,6 @@ export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 1
   return { videos, nextPageToken: data.nextPageToken || null };
 }
 
-// Fetches one page from every channel in a level, merges the results,
-// removes anything that's actually a Short (≤60s — those only belong in
-// the Shorts tab), and shuffles what's left.
 export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel = 12) {
   const outcomes = await Promise.allSettled(
     channelIds.map(id => fetchChannelVideoPage(id, pageTokens[id] || null, maxPerChannel))
@@ -89,7 +86,13 @@ export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel 
   outcomes.forEach((outcome, i) => {
     const channelId = channelIds[i];
     if (outcome.status === "fulfilled") {
-      videos = videos.concat(outcome.value.videos);
+      // Yahan humne filter lagaya hai taaki title mein #shorts ya #short wale video home feed mein na aayen
+      const filteredVideos = outcome.value.videos.filter(v => 
+        !v.title.toLowerCase().includes("#shorts") && 
+        !v.title.toLowerCase().includes("#short")
+      );
+      
+      videos = videos.concat(filteredVideos);
       nextPageTokens[channelId] = outcome.value.nextPageToken;
     } else {
       nextPageTokens[channelId] = pageTokens[channelId] || null;
