@@ -43,6 +43,17 @@ export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 1
     throw new Error("YouTube API key missing. Add VITE_YOUTUBE_API_KEY in your .env file.");
   }
 
+  // --- यहाँ से कोटा बचाने का काम शुरू ---
+  const cacheKey = `yt_channel_${channelId}_${pageToken || 'first'}_${maxResults}`;
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    const cachedTime = localStorage.getItem(`${cacheKey}_time`);
+    if (cached && cachedTime && (new Date().getTime() - parseInt(cachedTime, 10) < 86400000)) {
+      return JSON.parse(cached);
+    }
+  } catch (e) {}
+  // ---------------------------------
+
   const playlistId = uploadsPlaylistId(channelId);
   let url = `${BASE_URL}/playlistItems?part=snippet,contentDetails&playlistId=${playlistId}&maxResults=${maxResults}&key=${API_KEY}`;
   if (pageToken) url += `&pageToken=${pageToken}`;
@@ -68,10 +79,30 @@ export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 1
       publishedAt: item.snippet.publishedAt,
     }));
 
-  return { videos, nextPageToken: data.nextPageToken || null };
+  const result = { videos, nextPageToken: data.nextPageToken || null };
+
+  // --- यहाँ कोटा टोकन लोकल मेमोरी में सेव हो रहा है ---
+  try {
+    localStorage.setItem(cacheKey, JSON.stringify(result));
+    localStorage.setItem(`${cacheKey}_time`, new Date().getTime().toString());
+  } catch (e) {}
+  // -----------------------------------------------
+
+  return result;
 }
 
 export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel = 12) {
+  // --- यहाँ से कोटा बचाने का काम शुरू ---
+  const cacheKey = `yt_level_${channelIds.join('_')}_${JSON.stringify(pageTokens)}_${maxPerChannel}`;
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    const cachedTime = localStorage.getItem(`${cacheKey}_time`);
+    if (cached && cachedTime && (new Date().getTime() - parseInt(cachedTime, 10) < 86400000)) {
+      return JSON.parse(cached);
+    }
+  } catch (e) {}
+  // ---------------------------------
+
   const outcomes = await Promise.allSettled(
     channelIds.map(id => fetchChannelVideoPage(id, pageTokens[id] || null, maxPerChannel))
   );
@@ -102,10 +133,30 @@ export async function fetchLevelPage(channelIds, pageTokens = {}, maxPerChannel 
     });
   }
 
-  return { videos: shuffle(videos), nextPageTokens };
+  const result = { videos: shuffle(videos), nextPageTokens };
+
+  // --- यहाँ कोटा टोकन लोकल मेमोरी में सेव हो रहा है ---
+  try {
+    localStorage.setItem(cacheKey, JSON.stringify(result));
+    localStorage.setItem(`${cacheKey}_time`, new Date().getTime().toString());
+  } catch (e) {}
+  // -----------------------------------------------
+
+  return result;
 }
 
 export async function fetchShorts(channelIds, maxPerChannel = 15) {
+  // --- यहाँ से कोटा बचाने का काम शुरू ---
+  const cacheKey = `yt_shorts_${channelIds.join('_')}_${maxPerChannel}`;
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    const cachedTime = localStorage.getItem(`${cacheKey}_time`);
+    if (cached && cachedTime && (new Date().getTime() - parseInt(cachedTime, 10) < 86400000)) {
+      return JSON.parse(cached);
+    }
+  } catch (e) {}
+  // ---------------------------------
+
   const pages = await Promise.allSettled(
     channelIds.map(id => fetchChannelVideoPage(id, null, maxPerChannel))
   );
@@ -118,7 +169,16 @@ export async function fetchShorts(channelIds, maxPerChannel = 15) {
 
   const durations = await fetchDurations(candidates.map(v => v.id));
 
-  return shuffle(
+  const result = shuffle(
     candidates.filter(v => durations[v.id] && isShortDuration(durations[v.id]))
   );
+
+  // --- यहाँ कोटा टोकन लोकल मेमोरी में सेव हो रहा है ---
+  try {
+    localStorage.setItem(cacheKey, JSON.stringify(result));
+    localStorage.setItem(`${cacheKey}_time`, new Date().getTime().toString());
+  } catch (e) {}
+  // -----------------------------------------------
+
+  return result;
 }
