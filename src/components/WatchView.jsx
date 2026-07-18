@@ -100,7 +100,7 @@ export default function WatchView({ video, onBack, onSelect }) {
       <div className="player-wrap">
         <iframe
           className="player"
-          src={`https://www.youtube.com/embed/${video.id}`}
+          src={`https://www.youtube.com/embed/${video.id}?autoplay=1&playsinline=1`}
           title={video.title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
