@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.edutube.app",
+    "sha256_cert_fingerprints": ["E9:6C:1D:61:69:A1:CF:46:87:DA:61:F3:0F:22:D8:42:BE:7A:86:D7:06:DC:46:17:20:31:29:86:F4:24:B2:E3"]
+  }
+}]
