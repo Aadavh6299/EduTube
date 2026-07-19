@@ -12,11 +12,18 @@ import Account from "./components/Account";
 
 const PER_PAGE = 12;
 
+function getInitialLevel() {
+  const params = new URLSearchParams(window.location.search);
+  const requested = params.get("level");
+  if (requested && LEVELS.some(l => l.id === requested)) return requested;
+  return "school";
+}
+
 export default function App() {
   const [tab, setTab] = useState("home");
-  const [levelId, setLevelId] = useState("school");
+  const [levelId, setLevelId] = useState(getInitialLevel);
   const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState(""); 
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [videos, setVideos] = useState([]);
   const [pageTokens, setPageTokens] = useState({});
   const [hasMore, setHasMore] = useState(false);
@@ -26,7 +33,6 @@ export default function App() {
   const [watching, setWatching] = useState(null);
   const sentinelRef = useRef(null);
 
-  // --- NAYA LOGIC: Back Button Sync ---
   useEffect(() => {
     const handlePopState = () => {
       if (watching) {
@@ -44,7 +50,6 @@ export default function App() {
       window.history.pushState(null, "", window.location.href);
     }
   }, [watching, tab]);
-  // ------------------------------------
 
   const level = LEVELS.find(l => l.id === levelId);
 
@@ -139,14 +144,14 @@ export default function App() {
       {tab === "home" && (
         <>
           <Header query={query} onQueryChange={setQuery} onLogoClick={() => setWatching(null)} />
-          
-          <LevelPills 
-            levels={LEVELS} 
-            activeId={levelId} 
+
+          <LevelPills
+            levels={LEVELS}
+            activeId={levelId}
             onSelect={(id) => {
               setLevelId(id);
-              setQuery(""); 
-            }} 
+              setQuery("");
+            }}
           />
 
           {watching ? (
@@ -163,7 +168,7 @@ export default function App() {
               )}
               <VideoGrid videos={filtered} onSelect={setWatching} />
               <div ref={sentinelRef} style={{ height: 1 }} />
-              {loadingMore && <p className="status">Aur videos load ho rahe हैं...</p>}
+              {loadingMore && <p className="status">Aur videos load ho rahe hain...</p>}
             </main>
           )}
         </>
@@ -175,4 +180,4 @@ export default function App() {
       <BottomNav active={tab} onSelect={setTab} />
     </div>
   );
-}
+                                }
