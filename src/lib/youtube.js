@@ -23,6 +23,15 @@ function isShortDuration(iso) {
   return hours === 0 && minutes * 60 + seconds <= 60;
 }
 
+// Matches promotional/marketing titles (result announcements, admission
+// pushes) using WHOLE-WORD matching, so it never catches unrelated words
+// that merely contain these letters (e.g. "Shortcut" stays safe).
+const PROMO_PATTERN = /\b(result|results|topper|toppers|congratulations|admission|admissions|enrol|enroll|enrolment|enrollment|selection list|rank holder|batch starting|seats left|limited seats)\b/i;
+
+function isPromotional(title) {
+  return PROMO_PATTERN.test(title);
+}
+
 async function fetchDurations(ids) {
   const durations = {};
   for (let i = 0; i < ids.length; i += 50) {
@@ -38,10 +47,6 @@ async function fetchDurations(ids) {
   return durations;
 }
 
-// Cache lasts 6 hours — long enough to save real quota, short enough that
-// new uploads still show up same-day. We only ever cache the RAW data;
-// shuffling always happens after reading from cache, so the feed still
-// looks different every time it's opened.
 const CACHE_MS = 6 * 60 * 60 * 1000;
 
 function readCache(key) {
@@ -84,6 +89,7 @@ export async function fetchChannelVideoPage(channelId, pageToken, maxResults = 1
 
   const videos = (data.items || [])
     .filter(item => item.snippet?.title && item.snippet.title !== "Private video")
+    .filter(item => !isPromotional(item.snippet.title))
     .map(item => ({
       id: item.contentDetails.videoId,
       title: item.snippet.title,
