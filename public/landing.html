@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EduTube — Sirf Padhai. Bas Padhai.</title>
+<link rel="icon" href="/icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Inter", system-ui, sans-serif; color: #0f0f0f; background: #fff; line-height: 1.5; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+  header { display: flex; align-items: center; gap: 8px; padding: 20px 24px; }
+  .logo-mark { width: 32px; height: 32px; border-radius: 9px; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .logo-text { font-weight: 800; font-size: 19px; }
+
+  .hero { text-align: center; padding: 48px 24px 32px; }
+  .hero h1 { font-size: 34px; font-weight: 800; line-height: 1.25; margin-bottom: 14px; }
+  .hero p { font-size: 16px; color: #555; max-width: 480px; margin: 0 auto 28px; }
+
+  .cta-row { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-size: 15px; font-weight: 600; text-decoration: none; width: 100%; max-width: 300px; }
+  .btn-primary { background: #000; color: #fff; }
+  .btn-secondary { background: #f0f0f0; color: #0f0f0f; }
+  .btn-note { font-size: 12px; color: #909090; margin-top: -4px; }
+
+  .features { padding: 40px 24px; display: grid; gap: 24px; grid-template-columns: 1fr; }
+  @media (min-width: 560px) { .features { grid-template-columns: 1fr 1fr; } }
+  .feature { padding: 20px; border-radius: 16px; background: #fafafa; }
+  .feature-emoji { font-size: 26px; margin-bottom: 10px; }
+  .feature h3 { font-size: 15.5px; font-weight: 700; margin-bottom: 6px; }
+  .feature p { font-size: 13.5px; color: #666; }
+
+  .levels { padding: 8px 24px 48px; text-align: center; }
+  .levels h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chip { padding: 8px 16px; border-radius: 999px; background: #f0f0f0; font-size: 13px; font-weight: 500; }
+
+  footer { text-align: center; padding: 28px 24px 40px; color: #999; font-size: 12.5px; border-top: 1px solid #f0f0f0; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="logo-mark">▶</div>
+  <span class="logo-text">EduTube</span>
+</header>
+
+<section class="hero wrap">
+  <h1>Sirf Padhai.<br>Bas Padhai.</h1>
+  <p>YouTube jaisा interface, lekin sirf educational content — koi entertainment, koi time-pass nahi. Nursery se lekar competitive exams tak, ek hi app mein.</p>
+
+  <div class="cta-row">
+    <a class="btn btn-primary" href="/edutube.apk" download>⬇ Download APK</a>
+    <span class="btn-note">Android ke liye · ~1MB</span>
+    <a class="btn btn-secondary" href="/">Web App Kholo (bina install kiye)</a>
+  </div>
+</section>
+
+<section class="features wrap">
+  <div class="feature">
+    <div class="feature-emoji">🎯</div>
+    <h3>Sirf Education Content</h3>
+    <p>Har video curated hai — trusted teachers aur institutes se, kabhi bhi entertainment nahi milega.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-emoji">📚</div>
+    <h3>Level ke Hisaab se</h3>
+    <p>Nursery, School, JEE/NEET, UPSC, College — apni zaroorat ka content turant dhundo.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-emoji">⚡</div>
+    <h3>Shorts Bhi Hain</h3>
+    <p>Quick concept clips, alag tab mein — bina time-waste content ke beech mein aaye.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-emoji">🎙️</div>
+    <h3>Voice Search</h3>
+    <p>Type na karna pade — bolke bhi topic search kar sakte ho.</p>
+  </div>
+</section>
+
+<section class="levels wrap">
+  <h2>Har Level Cover Hai</h2>
+  <div class="chip-row">
+    <span class="chip">🌱 Nursery</span>
+    <span class="chip">📚 School</span>
+    <span class="chip">🧬 JEE & NEET</span>
+    <span class="chip">🏛️ UPSC & Govt</span>
+    <span class="chip">💻 College & Coding</span>
+    <span class="chip">🎓 IITs & Global</span>
+  </div>
+</section>
+
+<footer>
+  EduTube — India ka education-only video app.
+</footer>
+
+</body>
+</html>
