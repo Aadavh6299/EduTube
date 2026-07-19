@@ -3,100 +3,175 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>EduTube — Sirf Padhai. Bas Padhai.</title>
+<title>EduTube — Sirf Padhai, Bina Distraction</title>
 <link rel="icon" href="/icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "Inter", system-ui, sans-serif; color: #0f0f0f; background: #fff; line-height: 1.5; }
+  html { scroll-behavior: smooth; }
+  body { font-family: "Inter", system-ui, sans-serif; background: #fff; color: #0f0f0f; overflow-x: hidden; }
   .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
 
-  header { display: flex; align-items: center; gap: 8px; padding: 20px 24px; }
-  .logo-mark { width: 32px; height: 32px; border-radius: 9px; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-  .logo-text { font-weight: 800; font-size: 19px; }
+  .hero { position: relative; background: #0a0a0a; color: #fff; padding: 28px 24px 60px; overflow: hidden; }
+  .glow { position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+    width: 420px; height: 420px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 70%);
+    pointer-events: none; animation: pulse 4s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); } 50% { opacity: 1; transform: translateX(-50%) scale(1.08); } }
 
-  .hero { text-align: center; padding: 48px 24px 32px; }
-  .hero h1 { font-size: 34px; font-weight: 800; line-height: 1.25; margin-bottom: 14px; }
-  .hero p { font-size: 16px; color: #555; max-width: 480px; margin: 0 auto 28px; }
+  nav { display: flex; align-items: center; gap: 8px; position: relative; z-index: 2; opacity: 0; animation: fadeDown 0.6s ease forwards; }
+  .logo-mark { width: 30px; height: 30px; border-radius: 9px; background: #fff; color: #000;
+    display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .logo-text { font-weight: 800; font-size: 17px; letter-spacing: -0.3px; }
 
-  .cta-row { display: flex; flex-direction: column; gap: 12px; align-items: center; }
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-size: 15px; font-weight: 600; text-decoration: none; width: 100%; max-width: 300px; }
-  .btn-primary { background: #000; color: #fff; }
-  .btn-secondary { background: #f0f0f0; color: #0f0f0f; }
-  .btn-note { font-size: 12px; color: #909090; margin-top: -4px; }
+  .hero-content { position: relative; z-index: 2; text-align: center; padding-top: 56px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    font-size: 12px; font-weight: 600; color: #ddd; margin-bottom: 22px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: blink 1.6s infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  .features { padding: 40px 24px; display: grid; gap: 24px; grid-template-columns: 1fr; }
-  @media (min-width: 560px) { .features { grid-template-columns: 1fr 1fr; } }
-  .feature { padding: 20px; border-radius: 16px; background: #fafafa; }
-  .feature-emoji { font-size: 26px; margin-bottom: 10px; }
-  .feature h3 { font-size: 15.5px; font-weight: 700; margin-bottom: 6px; }
-  .feature p { font-size: 13.5px; color: #666; }
+  .hero h1 { font-size: 42px; font-weight: 900; line-height: 1.12; letter-spacing: -1px; margin-bottom: 16px;
+    opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+  .hero h1 span { background: linear-gradient(90deg, #fff, #999); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { font-size: 15.5px; color: #999; max-width: 340px; margin: 0 auto 32px; line-height: 1.6;
+    opacity: 0; animation: fadeUp 0.7s ease 0.32s forwards; }
 
-  .levels { padding: 8px 24px 48px; text-align: center; }
-  .levels h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
-  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .chip { padding: 8px 16px; border-radius: 999px; background: #f0f0f0; font-size: 13px; font-weight: 500; }
+  .cta-row { display: flex; flex-direction: column; gap: 12px; align-items: center;
+    opacity: 0; animation: fadeUp 0.7s ease 0.44s forwards; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 28px;
+    border-radius: 999px; font-size: 15px; font-weight: 700; text-decoration: none; width: 100%; max-width: 280px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .btn:active { transform: scale(0.96); }
+  .btn-primary { background: #fff; color: #000; box-shadow: 0 8px 24px rgba(255,255,255,0.15); }
+  .btn-secondary { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.18); }
+  .btn-note { font-size: 11.5px; color: #666; }
 
-  footer { text-align: center; padding: 28px 24px 40px; color: #999; font-size: 12.5px; border-top: 1px solid #f0f0f0; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .features { padding: 56px 24px 24px; }
+  .section-label { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #999; margin-bottom: 10px; }
+  .section-title { text-align: center; font-size: 26px; font-weight: 800; margin-bottom: 40px; letter-spacing: -0.5px; }
+
+  .feature-list { display: flex; flex-direction: column; gap: 4px; }
+  .feature { display: flex; align-items: flex-start; gap: 16px; padding: 20px 4px; border-bottom: 1px solid #f0f0f0;
+    opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .feature.visible { opacity: 1; transform: translateY(0); }
+  .feature-icon { flex-shrink: 0; width: 46px; height: 46px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center; font-size: 21px; }
+  .feature-body h3 { font-size: 15.5px; font-weight: 700; margin-bottom: 4px; }
+  .feature-body p { font-size: 13.5px; color: #666; line-height: 1.5; }
+
+  .levels { padding: 48px 24px; text-align: center; background: #fafafa; margin-top: 40px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 20px; }
+  .chip { padding: 10px 16px; border-radius: 999px; background: #fff; border: 1px solid #eee;
+    font-size: 12.5px; font-weight: 600; text-decoration: none; color: #0f0f0f;
+    opacity: 0; transform: scale(0.9); transition: opacity 0.4s ease, transform 0.4s ease, background 0.15s ease, border-color 0.15s ease; }
+  .chip.visible { opacity: 1; transform: scale(1); }
+  .chip:active { background: #000; color: #fff; border-color: #000; }
+
+  .closing { padding: 64px 24px 48px; text-align: center; }
+  .closing h2 { font-size: 24px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
+  .closing p { font-size: 14px; color: #666; margin-bottom: 28px; }
+
+  footer { text-align: center; padding: 24px; color: #b0b0b0; font-size: 12px; }
 </style>
 </head>
 <body>
 
-<header class="wrap">
-  <div class="logo-mark">▶</div>
-  <span class="logo-text">EduTube</span>
-</header>
+<section class="hero">
+  <div class="glow"></div>
+  <nav class="wrap">
+    <div class="logo-mark">▶</div>
+    <span class="logo-text">EduTube</span>
+  </nav>
 
-<section class="hero wrap">
-  <h1>Sirf Padhai.<br>Bas Padhai.</h1>
-  <p>YouTube jaisा interface, lekin sirf educational content — koi entertainment, koi time-pass nahi. Nursery se lekar competitive exams tak, ek hi app mein.</p>
-
-  <div class="cta-row">
-    <a class="btn btn-primary" href="/edutube.apk" download>⬇ Download APK</a>
-    <span class="btn-note">Android ke liye · ~1MB</span>
-    <a class="btn btn-secondary" href="/">Web App Kholo (bina install kiye)</a>
+  <div class="hero-content wrap">
+    <div class="badge"><span class="dot"></span> India ka education-only video app</div>
+    <h1>Sirf Padhai.<br><span>Bina Distraction.</span></h1>
+    <p>YouTube jaisi feel, lekin ismein sirf padhai ka content hai — entertainment ya time-pass ke liye yahan jagah nahi.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="/edutube.apk" download>⬇ APK Download Karo</a>
+      <a class="btn btn-secondary" href="/">Web App Kholo</a>
+      <span class="btn-note">Android · 100% Free · ~1MB</span>
+    </div>
   </div>
 </section>
 
 <section class="features wrap">
-  <div class="feature">
-    <div class="feature-emoji">🎯</div>
-    <h3>Sirf Education Content</h3>
-    <p>Har video curated hai — trusted teachers aur institutes se, kabhi bhi entertainment nahi milega.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-emoji">📚</div>
-    <h3>Level ke Hisaab se</h3>
-    <p>Nursery, School, JEE/NEET, UPSC, College — apni zaroorat ka content turant dhundo.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-emoji">⚡</div>
-    <h3>Shorts Bhi Hain</h3>
-    <p>Quick concept clips, alag tab mein — bina time-waste content ke beech mein aaye.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-emoji">🎙️</div>
-    <h3>Voice Search</h3>
-    <p>Type na karna pade — bolke bhi topic search kar sakte ho.</p>
+  <p class="section-label">Kyun EduTube</p>
+  <h2 class="section-title">Har Feature Ek Wajah Se</h2>
+
+  <div class="feature-list">
+    <div class="feature">
+      <div class="feature-icon" style="background:#e8f5e9;">💯</div>
+      <div class="feature-body"><h3>100% Free, Hamesha</h3><p>Koi subscription nahi, koi hidden charge nahi — poori app free hai aur free rahegi.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon" style="background:#fff3e0;">🚫</div>
+      <div class="feature-body"><h3>Ad-Free Experience</h3><p>Beech mein koi ad nahi aata — padhai bina rukavat ke chalti rahe.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon" style="background:#e3f2fd;">🎯</div>
+      <div class="feature-body"><h3>Sirf Educational Content</h3><p>Har video trusted teachers aur institutes se curate kiya gaya hai — comedy, gaming, vlogs kabhi nahi.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon" style="background:#fce4ec;">🧠</div>
+      <div class="feature-body"><h3>Zero Distraction Design</h3><p>Koi random recommendation ya clickbait thumbnail nahi — bas wahi content jo tumhe chahiye.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon" style="background:#f3e5f5;">📚</div>
+      <div class="feature-body"><h3>Level ke Hisaab se Organized</h3><p>Nursery se lekar JEE, NEET, UPSC aur College tak — apna level chuno, seedha wahi content milega.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon" style="background:#fff9c4;">⚡</div>
+      <div class="feature-body"><h3>Shorts for Quick Revision</h3><p>60-second concept clips, alag tab mein — jaldi revise karne ke liye perfect.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon" style="background:#e0f7fa;">🎙️</div>
+      <div class="feature-body"><h3>Voice Search</h3><p>Type karne ki zaroorat nahi — bol ke topic search karo, turant result milega.</p></div>
+    </div>
   </div>
 </section>
 
 <section class="levels wrap">
-  <h2>Har Level Cover Hai</h2>
+  <p class="section-label">Coverage</p>
+  <h2 class="section-title" style="margin-bottom:0;">Apna Level Chuno</h2>
   <div class="chip-row">
-    <span class="chip">🌱 Nursery</span>
-    <span class="chip">📚 School</span>
-    <span class="chip">🧬 JEE & NEET</span>
-    <span class="chip">🏛️ UPSC & Govt</span>
-    <span class="chip">💻 College & Coding</span>
-    <span class="chip">🎓 IITs & Global</span>
+    <a class="chip" href="/?level=nursery">🌱 Nursery</a>
+    <a class="chip" href="/?level=school">📚 School 1–12</a>
+    <a class="chip" href="/?level=jee_neet">🧬 JEE & NEET</a>
+    <a class="chip" href="/?level=upsc_govt">🏛️ UPSC & Govt</a>
+    <a class="chip" href="/?level=college_coding">💻 College & Coding</a>
+    <a class="chip" href="/?level=top_institutes">🎓 IITs & Global</a>
   </div>
 </section>
 
-<footer>
-  EduTube — India ka education-only video app.
-</footer>
+<section class="closing wrap">
+  <h2>Ab shuru karo</h2>
+  <p>30 second mein install karo, aaj se hi distraction-free padhai shuru karo.</p>
+  <div class="cta-row">
+    <a class="btn" style="background:#000;color:#fff;" href="/edutube.apk" download>⬇ APK Download Karo</a>
+  </div>
+</section>
+
+<footer>EduTube — India ka education-only video app.</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.feature, .chip').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>
